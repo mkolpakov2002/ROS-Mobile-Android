@@ -68,10 +68,10 @@ The following Nodes are currently supported by ROS-Mobile. For a comprehensive o
 ## Short Example Usage
 
 <p float="left" align="middle">
-  <img src="/images/ShortExample01.jpg" width="200 hspace="50" />
-  <img src="/images/ShortExample02.jpg" width="200 hspace="50" />
-  <img src="/images/ShortExample03.jpg" width="200 hspace="50" />
-  <img src="/images/ShortExample04.jpg" width="200 hspace="50" />
+  <img src="/images/ShortExample01.jpg" width="1080"  alt="ShortExample01"/>
+  <img src="/images/ShortExample02.jpg" width="1080"  alt="ShortExample02"/>
+  <img src="/images/ShortExample03.jpg" width="1080"  alt="ShortExample03"/>
+  <img src="/images/ShortExample04.jpg" width="1080"  alt="ShortExample04"/>
 </p>
 
 
