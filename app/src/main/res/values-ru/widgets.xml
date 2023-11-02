@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="widget_names">
+        <item>Батарея</item>
+        <item>Кнопка</item>
+        <item>Камера</item>
+        <item>Отладка (Debug)</item>
+        <item>GPS</item>
+        <item>Джойстик</item>
+        <item>Метка (Label)</item>
+        <item>Логгер</item>
+        <item>RqtPlot</item>
+        <item>Переключатель</item>
+        <item>Viz2D</item>
+    </string-array>
+
+    <string-array name="layer_names">
+        <item>Сетчатая карта (GridMap)</item>
+        <item>Лазерное сканирование (LaserScan)</item>
+        <item>Путь (Path)</item>
+        <item>Положение (Pose)</item>
+        <item>Цель касания (TouchGoal)</item>
+    </string-array>
+
+
+    <!--___________________________Layers____________________________-->
+
+    <!-- GridMap -->
+    <string name="GridMap_description">
+        Отображает сетку занятости на земной плоскости из nav_msgs::OccupancyGrid.
+        Рекомендуемый максимальный размер сетчатой карты не должен превышать 1 000 000 ячеек, иначе
+        могут возникнуть проблемы с производительностью.
+    </string>
+
+    <!-- LaserScan -->
+    <string name="LaserScan_description">
+        Отображает данные из сообщения sensor_msgs::LaserScan в виде точек.
+    </string>
+
+    <!-- Path -->
+    <string name="Path_description">
+        Отображает данные из сообщения nav_msgs::Path в виде линий.
+    </string>
+
+
+    <!-- Pose -->
+    <string name="Pose_description">
+        Отображает Pose из сообщения geometry_msgs::PoseStamped.
+    </string>
+
+
+    <!-- TouchGoal -->
+    <string name="TouchGoal_description">
+        Добавляет возможность публикации цели в виде сообщения geometry_msgs::PoseStamped.
+        Нажмите дважды, чтобы установить позицию цели, и перетащите, чтобы определить ориентацию.
+    </string>
+
+    <!--___________________________Widgets____________________________-->
+
+    <!-- Battery -->
+    <string name="Battery_description">
+        Индикатор заряда батареи, который отображает активность зарядки и процент заряда.
+    </string>
+
+    <!-- Button -->
+    <string name="Button_description">
+        Узел кнопки, который при нажатии публикует на выбранную пользователем тему (Topic) "True", а при отпускании - "False".
+    </string>
+
+    <!-- Switch -->
+    <string name="SwitchButton_description">
+        Узел переключателя, который посылает булево сообщение в зависимости от текущего состояния переключателя.
+    </string>
+
+    <string-array name="button_rotation">
+        <item>0°</item>
+        <item>90°</item>
+        <item>180°</item>
+        <item>270°</item>
+    </string-array>
+
+
+    <!-- Camera -->
+    <string name="Camera_description">
+        Узел камеры предназначен для отображения записей с камеры. Поэтому он подписывается на
+        указанную в деталях тему (Topic) и получает сообщение sensor_msgs/Image.
+        Затем он отобразит полученное изображение на вкладке Viz.
+    </string>
+
+
+    <!-- Debug -->
+    <string name="Debug_description">
+        Узел отладки, который может показывать все темы, аналогично rostopic info.
+    </string>
+
+    <string name="Gps_description">Узел GPS предназначен для отображения GPS-позиции
+        подключенного робота на карте. Поэтому он подписывается на указанную в деталях тему
+        и получает сообщение sensor_msgs/NavSatFix. Затем он отобразит полученную позицию
+        на карте, визуализированной на вкладке Viz. Карта будет при этом центрироваться на позиции.
+        Вы можете увеличивать и уменьшать масштаб с помощью жестов.
+    </string>
+
+
+    <!-- Joystick -->
+    <string name="Joystick_description">
+        Узел джойстика предназначен для телеоперационного управления робототехническими системами.
+        Он будет отображать позицию джойстика из вкладки визуализации на тему,
+        указанную в деталях. Наследуемое сообщение при этом является geometry_msgs/Twist. В
+        разделе деталей джойстика вы можете указать, к каким переменным сообщения Twist
+        должна быть сопоставлена позиция джойстика. Кроме того, можно установить размерности сопоставления. Чтобы изменить
+        местоположение джойстика для управления, просто коснитесь кнопки джойстика на вкладке Viz
+        и переместите ее в желаемое место. Когда кнопка будет отпущена, она автоматически вернется в центр.
+    </string>
+
+    <string name="Label_description">
+        Метка, которая не взаимодействует с ROS, но помогает организовать ваш экран.
+    </string>
+
+    <string-array name="joystick_twist_dir">
+        <item>Linear</item>
+        <item>Angular</item>
+    </string-array>
+
+    <string-array name="joystick_twist_axis">
+        <item>X</item>
+        <item>Y</item>
+        <item>Z</item>
+    </string-array>
+
+    <!-- Logger -->
+    <string name="Logger_description">
+        Сообщение логгера, которое просто выводит строковые сообщения, опубликованные на установленную тему.
+    </string>
+
+    <!-- RqtPlot -->
+    <string name="RqtPlot_description">
+        RqtPlot предоставляет плагин GUI, визуализирующий числовые значения в 2D-графике.
+    </string>
+
+    <!-- Viz2D -->
+    <string name="Viz2D_description">
+        2D-просмотр нескольких слоев.
+    </string>
+
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="update_title">
+        <item>Обновление 2.1:\nНовые виджеты и исправление ошибок</item>
+    </string-array>
+
+    <string-array name="update_descr">
+        <item>\u2022 Добавлен виджет RqtPlot \n\u2022 Добавлен виджет Battery \n\u2022 Добавлены LaserScan и TouchGoal \n\u2022 Улучшена вкладка SSH</item>
+    </string-array>
+
+    <integer-array name="update_img">
+        <item>@drawable/update</item>
+    </integer-array>
+
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="intro_title">
+        <item>ROS-Mobile</item>
+        <item>Конфигурация</item>
+        <item>Настройка</item>
+        <item>Мониторинг</item>
+        <item>Управление</item>
+        <item>SSH</item>
+    </string-array>
+
+    <string-array name="intro_descr">
+        <item>ROS-Mobile - это приложение для Android, предназначенное для динамического управления и визуализации мобильных робототехнических систем, работающих на Robot Operating System (ROS).</item>
+        <item>Создавайте собственные конфигурации для каждой из ваших робототехнических систем.</item>
+        <item>Улучшайте свои конфигурации, определяя настраиваемые узлы в разделе Детали.</item>
+        <item>Мониторинг вашей робототехнической системы, например, отображение карты занятости сетки.</item>
+        <item>Управление вашей робототехнической системой, например, использование телеоперационного управления через узел джойстика.</item>
+        <item>Прямой доступ к роботизированной системе через встроенный SSH-терминал.</item>
+    </string-array>
+
+    <integer-array name="intro_img">
+        <item>@drawable/intro_start</item>
+        <item>@drawable/intro_config</item>
+        <item>@drawable/intro_details</item>
+        <item>@drawable/intro_map</item>
+        <item>@drawable/intro_joystick</item>
+        <item>@drawable/intro_ssh</item>
+    </integer-array>
+
+</resources>
