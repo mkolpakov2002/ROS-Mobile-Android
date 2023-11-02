@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="widget_names">
-        <item>Батарея</item>
-        <item>Кнопка</item>
-        <item>Камера</item>
-        <item>Отладка (Debug)</item>
-        <item>GPS</item>
-        <item>Джойстик</item>
-        <item>Метка (Label)</item>
-        <item>Логгер</item>
+        <item>Battery</item>
+        <item>Button</item>
+        <item>Camera</item>
+        <item>Debug</item>
+        <item>Gps</item>
+        <item>Joystick</item>
+        <item>Label</item>
+        <item>Logger</item>
         <item>RqtPlot</item>
-        <item>Переключатель</item>
+        <item>SwitchButton</item>
         <item>Viz2D</item>
     </string-array>
 
     <string-array name="layer_names">
-        <item>Сетчатая карта (GridMap)</item>
-        <item>Лазерное сканирование (LaserScan)</item>
-        <item>Путь (Path)</item>
-        <item>Положение (Pose)</item>
-        <item>Цель касания (TouchGoal)</item>
+        <item>GridMap</item>
+        <item>LaserScan</item>
+        <item>Path</item>
+        <item>Pose</item>
+        <item>TouchGoal</item>
     </string-array>
-
 
     <!--___________________________Layers____________________________-->
 
