@@ -4,6 +4,9 @@ pluginManagement {
         google()
         mavenCentral()
         maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+        maven {
             url 'https://repo1.maven.org/maven2'
         }
         maven {
@@ -23,6 +26,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+        maven {
             url 'https://repo1.maven.org/maven2'
         }
         maven {
@@ -36,6 +42,8 @@ dependencyResolutionManagement {
         }
     }
 }
+enableFeaturePreview "STABLE_CONFIGURATION_CACHE"
 rootProject.name = "RosAndroid"
 include ':app'
 include ':jcraft'
+include ':yandex_smart_home'

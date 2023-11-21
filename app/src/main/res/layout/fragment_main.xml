@@ -99,7 +99,7 @@
 
             <fragment
                 android:id="@+id/fragment"
-                android:name="com.schneewittchen.rosandroid.ui.fragments.config.ConfigurationsFragment"
+                android:name="ru.hse.miem.ros.ui.fragments.config.ConfigurationsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:layout="@layout/fragment_configurations" />

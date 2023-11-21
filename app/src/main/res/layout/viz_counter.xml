@@ -41,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/counterText" />
 
-    <com.schneewittchen.rosandroid.widgets.joystick.JoystickView
+    <ru.hse.miem.ros.widgets.joystick.JoystickView
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:decorationColor="@color/whiteLow"

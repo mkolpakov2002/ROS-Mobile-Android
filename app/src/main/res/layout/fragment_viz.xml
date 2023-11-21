@@ -15,14 +15,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:openDrawer="right">
 
-        <com.schneewittchen.rosandroid.ui.fragments.viz.WidgetViewGroup
+        <ru.hse.miem.ros.ui.fragments.viz.WidgetViewGroup
             android:id="@+id/widget_groupview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
             app:crossColor="#8000BCD4">
 
-        </com.schneewittchen.rosandroid.ui.fragments.viz.WidgetViewGroup>
+        </ru.hse.miem.ros.ui.fragments.viz.WidgetViewGroup>
 
         <com.google.android.material.navigation.NavigationView
             android:layout_width="wrap_content"

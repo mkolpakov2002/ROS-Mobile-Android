@@ -40,7 +40,7 @@ There are three different ways for installing ROS-Mobile onto your mobile device
 
 ##### Download from Google Playstore:
 
-- Simply go to the [Google Playstore Website](https://play.google.com/store/apps/details?id=com.schneewittchen.rosandroid) of the ROS-Mobile app and download it. It will be installed automatically
+- Simply go to the [Google Playstore Website](https://play.google.com/store/apps/details?id=ros) of the ROS-Mobile app and download it. It will be installed automatically
 
 ## Introduction Video
 [![Introduction Video](http://img.youtube.com/vi/T0HrEcO-0x0/0.jpg)](http://www.youtube.com/watch?v=T0HrEcO-0x0)

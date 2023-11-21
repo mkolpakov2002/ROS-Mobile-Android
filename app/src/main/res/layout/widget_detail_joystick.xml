@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <com.schneewittchen.rosandroid.ui.views.ScaleView
+    <ru.hse.miem.ros.ui.views.ScaleView
         android:id="@+id/xAxisScale"
         android:layout_width="0dp"
         android:layout_height="20dp"
@@ -168,7 +168,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
-    <com.schneewittchen.rosandroid.ui.views.ScaleView
+    <ru.hse.miem.ros.ui.views.ScaleView
         android:id="@+id/xAxisScale2"
         android:layout_width="0dp"
         android:layout_height="20dp"
@@ -222,8 +222,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/xAxisScale2"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xAxisScale2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
