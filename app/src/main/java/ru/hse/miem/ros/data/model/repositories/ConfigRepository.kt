@@ -35,7 +35,7 @@ interface ConfigRepository {
     suspend fun createWidget(parentId: Long, widgetType: String)
     suspend fun deleteWidget(parentId: Long, widget: BaseEntity)
     suspend fun updateWidget(parentId: Long?, widget: BaseEntity)
-    fun findWidget(widgetId: Long): LiveData<BaseEntity>
+    fun findWidget(widgetId: Long): LiveData<BaseEntity?>
     fun getWidgets(id: Long): LiveData<List<BaseEntity>>
     suspend fun updateSSH(ssh: SSHEntity)
     fun setSSH(ssh: SSHEntity, configId: String)

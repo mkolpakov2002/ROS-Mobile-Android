@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ROS-Mobile</string>
+    <string name="app_name">Умный контроль</string>
 
     <string name="add_widget">Добавить виджет</string>
     <string name="navigation_drawer_open">Открыть навигационную панель</string>

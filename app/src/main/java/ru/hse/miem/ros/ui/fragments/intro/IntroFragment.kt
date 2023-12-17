@@ -9,15 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import ru.hse.miem.ros.R
+import ru.hse.miem.ros.databinding.FragmentIntroBinding
 import ru.hse.miem.ros.ui.fragments.main.MainFragment
 import ru.hse.miem.ros.viewmodel.IntroViewModel
 
@@ -34,17 +32,12 @@ import ru.hse.miem.ros.viewmodel.IntroViewModel
 class IntroFragment() : Fragment() {
     lateinit var screenPager: ViewPager
     lateinit var introViewPagerAdapter: IntroViewPagerAdapter
-    lateinit var tabIndicator: TabLayout
-    lateinit var buttonNext: Button
-    lateinit var buttonGetStarted: Button
     lateinit var buttonAnimation: Animation
-    lateinit var buttonConfiguration: Button
-    lateinit var editTextConfigName: EditText
-    lateinit var videoView: YouTubePlayerView
     lateinit var mViewModel: IntroViewModel
     lateinit var screenItems: List<ScreenItem?>
     var itemPosition: Int = 0
     var requireCheckIn: Boolean = false
+    private lateinit var binding: FragmentIntroBinding
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mViewModel = ViewModelProvider(this)[IntroViewModel::class.java]
@@ -53,13 +46,6 @@ class IntroFragment() : Fragment() {
     public override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireCheckIn = requireCheckIn()
 
-        // Init Views
-        buttonNext = view.findViewById(R.id.onboarding_btn_next)
-        buttonGetStarted = view.findViewById(R.id.onboarding_btn_getStarted)
-        buttonConfiguration = view.findViewById(R.id.onboarding_btn_startConfig)
-        editTextConfigName = view.findViewById(R.id.onboarding_editText_configName)
-        tabIndicator = view.findViewById(R.id.tabIndicator)
-        videoView = view.findViewById(R.id.onboarding_video_view)
         buttonAnimation =
             AnimationUtils.loadAnimation(view.context, R.anim.onboarding_buttton_animation)
 
@@ -70,10 +56,10 @@ class IntroFragment() : Fragment() {
         screenPager.setAdapter(introViewPagerAdapter)
 
         // Setup tablayout
-        tabIndicator.setupWithViewPager(screenPager)
+        binding.tabIndicator.setupWithViewPager(screenPager)
 
         // tablayout add change listener
-        tabIndicator.addOnTabSelectedListener(object : OnTabSelectedListener {
+        binding.tabIndicator.addOnTabSelectedListener(object : OnTabSelectedListener {
             public override fun onTabSelected(tab: TabLayout.Tab) {
                 if (tab.position == screenItems.size) {
                     loadVideoScreen()
@@ -85,10 +71,10 @@ class IntroFragment() : Fragment() {
         })
 
         // Set the video
-        lifecycle.addObserver(videoView)
+        lifecycle.addObserver(binding.onboardingVideoView)
 
         // next button click listener
-        buttonNext.setOnClickListener { v: View? ->
+        binding.onboardingBtnNext.setOnClickListener { v: View? ->
             try {
                 jumpToNextScreen()
             } catch (e: PackageManager.NameNotFoundException) {
@@ -96,9 +82,9 @@ class IntroFragment() : Fragment() {
             }
         }
         // Get started Button click listener
-        buttonGetStarted.setOnClickListener { v: View? -> loadConfigNameScreen() }
+        binding.onboardingBtnGetStarted.setOnClickListener { v: View? -> loadConfigNameScreen() }
         // NameConfig Click Listener
-        buttonConfiguration.setOnClickListener { v: View? ->
+        binding.onboardingBtnStartConfig.setOnClickListener { v: View? ->
             try {
                 createFirstConfig()
             } catch (e: PackageManager.NameNotFoundException) {
@@ -111,7 +97,7 @@ class IntroFragment() : Fragment() {
     private fun createFirstConfig() {
         // Get string for first config name
         val bundle: Bundle = Bundle()
-        bundle.putString("configName", editTextConfigName.text.toString())
+        bundle.putString("configName", binding.onboardingEditTextConfigName.text.toString())
 
         // Save the Prefs
         setCheckInPrefData()
@@ -152,21 +138,21 @@ class IntroFragment() : Fragment() {
 
     // show the get started button and hide the indicator and the next button
     private fun loadVideoScreen() {
-        buttonGetStarted.animation = buttonAnimation
-        buttonNext.visibility = View.INVISIBLE
-        buttonGetStarted.visibility = View.VISIBLE
-        tabIndicator.visibility = View.INVISIBLE
+        binding.onboardingBtnGetStarted.animation = buttonAnimation
+        binding.onboardingBtnNext.visibility = View.INVISIBLE
+        binding.onboardingBtnGetStarted.visibility = View.VISIBLE
+        binding.tabIndicator.visibility = View.INVISIBLE
         screenPager.visibility = View.INVISIBLE
-        videoView.visibility = View.VISIBLE
+        binding.onboardingVideoView.visibility = View.VISIBLE
     }
 
     private fun loadConfigNameScreen() {
-        buttonGetStarted.animation = null
-        buttonConfiguration.animation = buttonAnimation
-        buttonGetStarted.visibility = View.INVISIBLE
-        videoView.visibility = View.INVISIBLE
-        buttonConfiguration.visibility = View.VISIBLE
-        editTextConfigName.visibility = View.VISIBLE
+        binding.onboardingBtnGetStarted.animation = null
+        binding.onboardingBtnStartConfig.animation = buttonAnimation
+        binding.onboardingBtnGetStarted.visibility = View.INVISIBLE
+        binding.onboardingVideoView.visibility = View.INVISIBLE
+        binding.onboardingBtnStartConfig.visibility = View.VISIBLE
+        binding.onboardingEditTextConfigName.visibility = View.VISIBLE
     }
 
     @Throws(PackageManager.NameNotFoundException::class)
@@ -208,8 +194,9 @@ class IntroFragment() : Fragment() {
     public override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_intro, container, false)
+    ): View {
+        binding = FragmentIntroBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     companion object {

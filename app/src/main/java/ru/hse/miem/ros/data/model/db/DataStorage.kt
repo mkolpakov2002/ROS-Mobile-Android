@@ -120,7 +120,7 @@ abstract class DataStorage : RoomDatabase() {
         widgetDao().delete(widget)
     }
 
-    fun getWidget(configId: Long, widgetId: Long): LiveData<BaseEntity> {
+    fun getWidget(configId: Long, widgetId: Long): LiveData<BaseEntity?> {
         return widgetDao().getWidget(configId, widgetId)
     }
 

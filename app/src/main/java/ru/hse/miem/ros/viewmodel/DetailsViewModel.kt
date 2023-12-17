@@ -28,17 +28,19 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
     private var lastDeletedWidget: BaseEntity? = null
     val widgetPath: LiveData<MutableList<Long>?> get() = selectedPath
     private val TAG: String = DetailsViewModel::class.java.simpleName
-    private val selectedPath: MutableLiveData<MutableList<Long>?> by lazy {
-        MutableLiveData(mutableListOf())
-    }
+    private val selectedPath: MutableLiveData<MutableList<Long>> = MutableLiveData(mutableListOf())
 
     private suspend fun performWidgetAction(action: suspend (Long?) -> Unit) {
-        getParentId(0)?.also { action(it) }
+        getParentId(0)?.also {
+            action(it)
+        }
     }
 
     fun createWidget(selectedText: String) = viewModelScope.launch {
         performWidgetAction {
-            it?.let { rosDomain.createWidget(it, selectedText) }
+            it?.let {
+                rosDomain.createWidget(it, selectedText)
+            }
         }
     }
 
@@ -67,9 +69,19 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+//    private fun getParentId(branch: Int): Long? {
+//        return selectedPath.value?.getOrNull(branch)
+//    }
+
     private fun getParentId(branch: Int): Long? {
-        return selectedPath.value?.getOrNull(branch)
+        var parentId: Long? = null
+        val path: List<Long>? = selectedPath.getValue()
+        if (path!!.size > branch) {
+            parentId = path[0]
+        }
+        return parentId
     }
+
 
     val currentWidgets: LiveData<List<BaseEntity>> get() = rosDomain.currentWidgets
 
@@ -82,7 +94,7 @@ class DetailsViewModel(application: Application) : AndroidViewModel(application)
 
     val topicList: List<Topic> get() = rosDomain.topicList
 
-    val widget: LiveData<BaseEntity> get() = rosDomain.findWidget(selectedPath.value!![0])
+    val widget: LiveData<BaseEntity?> get() = rosDomain.findWidget(selectedPath.value!![0])
 
     fun select(widgetId: Long?) {
         lastDeletedWidget = null

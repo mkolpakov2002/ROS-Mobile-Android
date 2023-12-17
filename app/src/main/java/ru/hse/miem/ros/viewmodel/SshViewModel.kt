@@ -55,9 +55,9 @@ class SshViewModel(application: Application) : AndroidViewModel(application) {
     fun setSshUsername(usernameString: String) {
         val ssh: SSHEntity? = currentSSH.getValue()
         ssh?.let{
-            ssh.username = usernameString
+            it.username = usernameString
             viewModelScope.launch {
-                sshRepositoryImpl.updateSSHConfig(ssh)
+                sshRepositoryImpl.updateSSHConfig(it)
             }
         }
     }

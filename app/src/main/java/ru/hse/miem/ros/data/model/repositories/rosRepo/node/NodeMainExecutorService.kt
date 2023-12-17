@@ -19,7 +19,6 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.content.pm.ServiceInfo
 import android.net.wifi.WifiManager
 import android.os.Binder
 import android.os.IBinder
@@ -122,7 +121,7 @@ class NodeMainExecutorService : Service(), NodeMainExecutor {
                 val notification: Notification = Notification.Builder(this, CHANNEL_DEFAULT_IMPORTANCE)
                     .setContentTitle("getText(R.string.notification_title)")
                     .setContentText("getText(R.string.notification_message)")
-                    .setSmallIcon(R.drawable.intro_start)
+                    .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentIntent(pendingIntent)
                     .setTicker("getText(R.string.ticker_text)")
                     .build()

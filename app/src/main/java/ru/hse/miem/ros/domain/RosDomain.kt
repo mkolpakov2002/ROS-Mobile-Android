@@ -78,7 +78,7 @@ class RosDomain private constructor(application: Application) {
         configRepository.deleteWidget(parentId, widget)
     }
 
-    fun findWidget(widgetId: Long): LiveData<BaseEntity> {
+    fun findWidget(widgetId: Long): LiveData<BaseEntity?> {
         return configRepository.findWidget(widgetId)
     }
 

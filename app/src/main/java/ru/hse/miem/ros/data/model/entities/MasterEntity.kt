@@ -17,6 +17,9 @@ class MasterEntity {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
     var configId: Long = 0
+    var model: String = "Model"
+    var manufacturer: String = "Manufacturer"
+    var mac: String = "00:15:FF:F2:19:4C"
     var ip = "192.168.0.0"
     var port = 11311
 }

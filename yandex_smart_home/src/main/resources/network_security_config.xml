@@ -1,0 +1,10 @@
+<network-security-config>
+    <trust-anchors>
+        <!-- Trust preinstalled CAs -->
+        <certificates src="system" />
+        <!-- Additionally trust user added CAs -->
+        <certificates src="user" />
+        <!-- Trust certificates stored in our custom KeyStore -->
+        <certificates src="@raw/my_keystore" />
+    </trust-anchors>
+</network-security-config>

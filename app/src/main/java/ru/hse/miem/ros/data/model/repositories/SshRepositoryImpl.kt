@@ -11,6 +11,10 @@ import com.jcraft.jsch.ChannelShell
 import com.jcraft.jsch.JSch
 import com.jcraft.jsch.JSchException
 import com.jcraft.jsch.Session
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.hse.miem.ros.data.model.entities.SSHEntity
 import java.io.BufferedReader
 import java.io.IOException
@@ -33,7 +37,8 @@ import java.util.Properties
  * @updated on 16.11.2020
  * @modified by Tanya Rykova
  */
-class SshRepositoryImpl private constructor(application: Application) : SshRepository {
+class SshRepositoryImpl private constructor(application: Application) : SshRepository,
+    CoroutineScope by CoroutineScope(Dispatchers.Default) {
     private val configRepository: ConfigRepository
     override val currentSSH: LiveData<SSHEntity>
     private lateinit var jsch: JSch
@@ -42,7 +47,7 @@ class SshRepositoryImpl private constructor(application: Application) : SshRepos
     private var inputForTheChannel: OutputStream? = null
     private var outputFromTheChannel: InputStream? = null
     private lateinit var commander: PrintStream
-    private var br: BufferedReader? = null
+    private lateinit var br: BufferedReader
     override var outputData: MutableLiveData<String> = MutableLiveData()
     private var connected: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -53,26 +58,31 @@ class SshRepositoryImpl private constructor(application: Application) : SshRepos
         configRepository = ConfigRepositoryImpl.getInstance(application)
 
         // React on Config Changes
-        currentSSH = configRepository.currentConfigId
-            .switchMap { configId: Long -> configRepository.getSSH(configId) }
-        currentSSH.observeForever { ssh: SSHEntity -> updateSSH(ssh) }
+        currentSSH = configRepository.currentConfigId.switchMap {
+            configId: Long -> configRepository.getSSH(configId)
+        }
+        //TODO
+        currentSSH.observeForever {
+            ssh: SSHEntity? ->
+            ssh?.let { updateSSH(it) }
+        }
         mainHandler = Handler(Looper.getMainLooper())
     }
 
     override fun startSession() {
-        val ssh = currentSSH.getValue()
-        Thread {
-            try {
-                assert(ssh != null)
-                startSessionTask(ssh!!.username, ssh.password, ssh.ip, ssh.port)
-            } catch (e: Exception) {
-                e.printStackTrace()
+        currentSSH.getValue()?.let { ssh ->
+            launch {
+                try {
+                    startSessionTask(ssh.username, ssh.password, ssh.ip, ssh.port)
+                } catch (e: Exception) {
+                    Log.e(TAG, "${e.message}")
+                }
             }
-        }.start()
+        }
     }
 
     @Throws(JSchException::class, IOException::class)
-    private fun startSessionTask(username: String, password: String, ip: String, port: Int) {
+    private suspend fun startSessionTask(username: String, password: String, ip: String, port: Int) {
         // Check if session already running
         if (this::session.isInitialized && session.isConnected) {
             Log.i(TAG, "Session is running already")
@@ -102,18 +112,14 @@ class SshRepositoryImpl private constructor(application: Application) : SshRepos
 
         // Connect to channel
         channelssh.connect()
-        try {
-            Thread.sleep(100)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+        delay(100)
 
         // Check for connection
         if (channelssh.isConnected()) {
             connected.postValue(true)
         }
         var line: String
-        while ((br!!.readLine().also { line = it }) != null && channelssh.isConnected()) {
+        while ((br.readLine().also { line = it }) != null && channelssh.isConnected()) {
             // TODO: Check if every line will be displayed
             Log.i(TAG, "looper session")
 
@@ -125,8 +131,6 @@ class SshRepositoryImpl private constructor(application: Application) : SshRepos
             mainHandler.post {
                 outputData.setValue(finalLine)
             }
-            // outputData.setValue(finalLine);
-            // outputData.postValue(finalLine);
         }
     }
 
@@ -142,24 +146,24 @@ class SshRepositoryImpl private constructor(application: Application) : SshRepos
         get() = connected
 
     override fun sendMessage(message: String) {
-        Thread((Runnable {
+        launch {
             try {
                 commander.println(message)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "${e.message}")
             }
-        })).start()
+        }
     }
 
     override fun abort() {
-        Thread((Runnable {
+        launch {
             try {
                 commander.write(3)
                 commander.flush()
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "${e.message}")
             }
-        })).start()
+        }
     }
 
 //    override fun getOutputData(): LiveData<String> {

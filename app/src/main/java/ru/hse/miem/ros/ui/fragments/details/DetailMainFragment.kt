@@ -135,28 +135,26 @@ class DetailMainFragment() : Fragment(), RecyclerWidgetItemTouchHelper.TouchList
         position: Int
     ) {
         if (viewHolder is WidgetListAdapter.ViewHolder) {
-            deleteWidget(viewHolder.getAdapterPosition())
+            deleteWidget(viewHolder.bindingAdapterPosition)
         }
     }
 
     private fun deleteWidget(index: Int) {
         // get the removed item name to display it in snack bar
-        val deletedWidget: BaseEntity? = mAdapter.getItem(index)
+        val deletedWidget: BaseEntity = mAdapter.getItem(index)
 
-        if (deletedWidget!=null){
-            // remove the item from recycler view
-            viewModel.deleteWidget(deletedWidget)
+        // remove the item from recycler view
+        viewModel.deleteWidget(deletedWidget)
 
-            // showing snack bar with Undo option
-            val undoText: String = getString(R.string.widget_undo, deletedWidget.name)
-            val snackbar: Snackbar = Snackbar.make(requireView(), undoText, Snackbar.LENGTH_LONG)
-            snackbar.setAction("UNDO") { view: View? ->
-                // undo is selected, restore the deleted item
-                viewModel.restoreWidget()
-            }
-            snackbar.setActionTextColor(resources.getColor(R.color.color_attention))
-            snackbar.show()
+        // showing snack bar with Undo option
+        val undoText: String = getString(R.string.widget_undo, deletedWidget.name)
+        val snackbar: Snackbar = Snackbar.make(requireView(), undoText, Snackbar.LENGTH_LONG)
+        snackbar.setAction("UNDO") { view: View? ->
+            // undo is selected, restore the deleted item
+            viewModel.restoreWidget()
         }
+        snackbar.setActionTextColor(resources.getColor(R.color.color_attention))
+        snackbar.show()
     }
 
     public override fun onWidgetDetailsChanged(widgetEntity: BaseEntity) {

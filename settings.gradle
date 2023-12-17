@@ -46,4 +46,4 @@ enableFeaturePreview "STABLE_CONFIGURATION_CACHE"
 rootProject.name = "RosAndroid"
 include ':app'
 include ':jcraft'
-include ':yandex_smart_home'
+include ':yandex_iot'

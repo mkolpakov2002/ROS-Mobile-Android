@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/viz_options_drawer"
         android:layout_width="match_parent"
@@ -13,14 +12,15 @@
         android:fitsSystemWindows="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:openDrawer="right">
+        tools:openDrawer="right"
+        android:background="?attr/colorPrimaryContainer">
 
         <ru.hse.miem.ros.ui.fragments.viz.WidgetViewGroup
             android:id="@+id/widget_groupview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            app:crossColor="#8000BCD4">
+            app:crossColor="?attr/colorAccent">
 
         </ru.hse.miem.ros.ui.fragments.viz.WidgetViewGroup>
 
@@ -35,9 +35,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/black01dp"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp">
+                android:paddingVertical="8dp"
+                android:background="?attr/colorSurface">
 
                 <TextView
                     android:id="@+id/viz_options_textView"
@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:text="Viz Options"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="?attr/colorAccent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +57,7 @@
                     android:text="Edit Mode"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/viz_options_textView"
-                    app:thumbTint="@color/colorAccent" />
+                    app:thumbTint="?attr/colorAccent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

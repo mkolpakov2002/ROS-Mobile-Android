@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="Viz location"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

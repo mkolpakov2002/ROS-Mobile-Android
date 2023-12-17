@@ -10,14 +10,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputLayout
 import ru.hse.miem.ros.R
 import ru.hse.miem.ros.data.model.entities.MasterEntity
 import ru.hse.miem.ros.data.model.repositories.rosRepo.connection.ConnectionType
@@ -39,8 +37,6 @@ import ru.hse.miem.ros.viewmodel.MasterViewModel
  * @modified by Maxim Kolpakov
  */
 class MasterFragment() : Fragment(), OnEditorActionListener {
-    lateinit var ipAddressField: AutoCompleteTextView
-    lateinit var ipAddressLayout: TextInputLayout
     private lateinit var mViewModel: MasterViewModel
     private lateinit var binding: FragmentMasterBinding
     private lateinit var ipItemList: ArrayList<String?>
@@ -50,7 +46,7 @@ class MasterFragment() : Fragment(), OnEditorActionListener {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMasterBinding.inflate(inflater, container, false)
-        return binding.getRoot()
+        return binding.root
     }
 
     public override fun onDestroyView() {
@@ -64,27 +60,25 @@ class MasterFragment() : Fragment(), OnEditorActionListener {
         mViewModel = ViewModelProvider(requireActivity())[MasterViewModel::class.java]
 
         // Define Views --------------------------------------------------------------
-        ipAddressField = requireView().findViewById(R.id.ipAddessTextView)
-        ipAddressLayout = requireView().findViewById(R.id.ipAddessLayout)
         ipItemList = ArrayList()
         ipArrayAdapter = ArrayAdapter(
             requireContext(),
             R.layout.dropdown_menu_popup_item, ipItemList
         )
-        ipAddressField.setAdapter(ipArrayAdapter)
+        binding.ipAddessTextView.setAdapter(ipArrayAdapter)
         val firstDeviceIp: String = mViewModel.iPAddress
-        ipAddressField.setText(firstDeviceIp, false)
-        ipAddressField.setOnClickListener { clickedView: View? ->
+        binding.ipAddessTextView.setText(firstDeviceIp, false)
+        binding.ipAddessTextView.setOnClickListener { clickedView: View? ->
             updateIpSpinner()
-            ipAddressField.showDropDown()
+            binding.ipAddessTextView.showDropDown()
         }
-        ipAddressLayout.setEndIconOnClickListener { v: View? ->
-            ipAddressField.requestFocus()
-            ipAddressField.callOnClick()
+        binding.ipAddessLayout.setEndIconOnClickListener { v: View? ->
+            binding.ipAddessTextView.requestFocus()
+            binding.ipAddessTextView.callOnClick()
         }
-        ipAddressField.setOnItemClickListener {
+        binding.ipAddessTextView.setOnItemClickListener {
             parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
-            ipAddressField.clearFocus()
+            binding.ipAddessTextView.clearFocus()
         }
 
         // View model connection -------------------------------------------------------------------
@@ -110,7 +104,7 @@ class MasterFragment() : Fragment(), OnEditorActionListener {
         // User input ------------------------------------------------------------------------------
         binding.connectButton.setOnClickListener { v: View? ->
             updateMasterDetails()
-            mViewModel.setMasterDeviceIp(ipAddressField.text.toString())
+            mViewModel.setMasterDeviceIp(binding.ipAddessTextView.text.toString())
             mViewModel.connectToMaster()
         }
         binding.disconnectButton.setOnClickListener { v: View? -> mViewModel.disconnectFromMaster() }

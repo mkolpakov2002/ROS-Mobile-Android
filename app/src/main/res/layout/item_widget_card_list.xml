@@ -35,8 +35,7 @@
                 android:layout_toStartOf="@id/deleteIcon"
                 android:text="@string/delete"
                 android:textAllCaps="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="#fff" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         </RelativeLayout>
 
@@ -44,7 +43,7 @@
             android:id="@+id/view_foreground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark">
+            android:background="?attr/colorPrimaryContainer">
 
             <TextView
                 android:id="@+id/widget_name_textview"
@@ -64,7 +63,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@string/widget_list_type"
-                android:textColor="@color/whiteLow"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

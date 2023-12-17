@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -61,10 +60,8 @@ class DetailContentFragment() : Fragment(), WidgetChangeListener {
         backButtonOverview = view.findViewById(R.id.back_button_overview)
         backButtonGroup = view.findViewById(R.id.back_button_group)
         viewModel.widget.observe(
-            getViewLifecycleOwner(),
-            Observer { baseEntity: BaseEntity -> initView(baseEntity) }
-        )
-
+            getViewLifecycleOwner()
+        ) { baseEntity: BaseEntity -> initView(baseEntity) }
         // Construct back buttons
         backButtonOverview.setOnClickListener { v: View? ->
             navController.popBackStack(

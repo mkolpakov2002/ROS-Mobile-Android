@@ -18,7 +18,7 @@
         android:layout_marginTop="8dp"
         android:text="Parameters"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/includeId" />

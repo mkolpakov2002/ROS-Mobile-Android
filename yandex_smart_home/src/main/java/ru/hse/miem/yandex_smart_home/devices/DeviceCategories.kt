@@ -1,17 +1,16 @@
 package ru.hse.miem.yandex_smart_home.devices
 
-import ru.hse.miem.yandex_smart_home.api.YandexApi
 
-abstract class DeviceCategories(val apiInstance: YandexApi) {
+abstract class DeviceCategories() {
     val purifer: Purifer
-        get() = Purifer(apiInstance)
+        get() = Purifer()
 
     val vacuumCleaner: VacuumCleaner
-        get() = VacuumCleaner(apiInstance)
+        get() = VacuumCleaner()
 
     val light: Light
-        get() = Light(apiInstance)
+        get() = Light()
 
     val tvoc: Tvoc
-        get() = Tvoc(apiInstance)
+        get() = Tvoc()
 }

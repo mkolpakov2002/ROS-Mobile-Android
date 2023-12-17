@@ -49,7 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/resetButton"
         app:outerRingColor="@color/whiteMedium"
-        app:stickColor="@color/whiteLight" />
+        app:stickColor="?attr/colorAccent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

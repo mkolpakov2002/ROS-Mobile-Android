@@ -36,7 +36,8 @@ import java.util.Locale
  * @updated on 23.03.2021
  * @modified by Maxim Kolpakov
  */
-class ConfigRepositoryImpl private constructor(application: Application) : ConfigRepository {
+class ConfigRepositoryImpl private constructor(application: Application) : ConfigRepository,
+    CoroutineScope by CoroutineScope(Dispatchers.Default){
     private val mDataStorage: DataStorage
     private val mCurrentConfigId: MediatorLiveData<Long>
 
@@ -103,9 +104,9 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
         Log.i(TAG, "Add widget: " + widget.name)
         searchParent(widget, parentId, object : ParentListener {
             override suspend fun onParent(parentEntity: BaseEntity?) {
-                parentEntity?.addEntity(widget)
-                if (parentEntity != null) {
-                    mDataStorage.updateWidget(parentEntity)
+                parentEntity?.let {
+                    it.addEntity(widget)
+                    mDataStorage.updateWidget(it)
                 }
             }
         })
@@ -162,7 +163,7 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
         return mDataStorage.getWidgets(id)
     }
 
-    public override fun findWidget(widgetId: Long): LiveData<BaseEntity> {
+    public override fun findWidget(widgetId: Long): LiveData<BaseEntity?> {
         return mDataStorage.getWidget((mCurrentConfigId.getValue())!!, widgetId)
     }
 
@@ -199,12 +200,12 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
         return widget
     }
 
-    private suspend fun searchParent(widget: BaseEntity, parentId: Long, listener: ParentListener) {
-        val liveParent: LiveData<BaseEntity> = mDataStorage.getWidget(widget.configId, parentId)
+    private fun searchParent(widget: BaseEntity, parentId: Long, listener: ParentListener) {
+        val liveParent: LiveData<BaseEntity?> = mDataStorage.getWidget(widget.configId, parentId)
         liveParent.observeForever(object : Observer<BaseEntity?> {
             public override fun onChanged(value: BaseEntity?) {
                 val observer = this
-                CoroutineScope(Dispatchers.Main).launch {
+                launch {
                     listener.onParent(value)
                     liveParent.removeObserver(observer)
                 }

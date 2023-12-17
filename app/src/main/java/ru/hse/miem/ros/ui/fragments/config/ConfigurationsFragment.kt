@@ -16,8 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
-import ru.hse.miem.ros.viewmodel.ConfigurationsViewModel
 import ru.hse.miem.ros.R
+import ru.hse.miem.ros.viewmodel.ConfigurationsViewModel
 
 /**
  * TODO: Description
@@ -61,10 +61,10 @@ class ConfigurationsFragment() : Fragment() {
             ConfigurationsViewModel::class.java
         )
         setUpRecyclerViews()
-        addConfigButton.setOnClickListener(View.OnClickListener { v: View? -> mViewModel.addConfig() })
-        renameButton.setOnClickListener(View.OnClickListener { v: View? -> showRenameDialog() })
-        deleteButton.setOnClickListener(View.OnClickListener { v: View? -> showDeleteDialog() })
-        lastOpenedMoreButton.setOnClickListener(View.OnClickListener { v: View? ->
+        addConfigButton.setOnClickListener { v: View? -> mViewModel.addConfig() }
+        renameButton.setOnClickListener { v: View? -> showRenameDialog() }
+        deleteButton.setOnClickListener { v: View? -> showDeleteDialog() }
+        lastOpenedMoreButton.setOnClickListener { v: View? ->
             if (lastOpenedRV.visibility == View.GONE) {
                 lastOpenedRV.visibility = View.VISIBLE
                 lastOpenedMoreButton.setImageResource(R.drawable.ic_expand_less_white_24dp)
@@ -72,7 +72,7 @@ class ConfigurationsFragment() : Fragment() {
                 lastOpenedRV.visibility = View.GONE
                 lastOpenedMoreButton.setImageResource(R.drawable.ic_expand_more_white_24dp)
             }
-        })
+        }
         mViewModel.getLastOpenedConfigNames().observe(
             getViewLifecycleOwner(),
             Observer { configNames: List<String> -> lastOpenedAdapter.setConfigs(configNames) }

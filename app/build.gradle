@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-//    id 'kotlin-kapt'
 //    id 'com.google.dagger.hilt.android'
     id 'com.google.devtools.ksp'
 }
@@ -15,7 +14,7 @@ android {
         minSdk 26
         targetSdk 34
         versionCode 7
-        versionName '2.1.0'
+        versionName '1.0.0'
     }
 
     buildTypes {
@@ -73,11 +72,11 @@ dependencies {
     implementation 'org.ros.rosjava_messages:tf2_msgs:0.5.20'
 
     // Room
-    implementation "androidx.room:room-runtime:2.6.0"
-    implementation "androidx.room:room-ktx:2.6.0"
+    implementation "androidx.room:room-runtime:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
-    ksp "androidx.room:room-compiler:2.6.0"
+    ksp "androidx.room:room-compiler:2.6.1"
 
     // Parsing
     implementation 'com.google.code.gson:gson:2.10.1'
