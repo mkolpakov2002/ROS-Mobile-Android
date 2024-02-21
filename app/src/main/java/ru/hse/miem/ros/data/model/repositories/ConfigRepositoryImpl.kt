@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.switchMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import ru.hse.miem.ros.data.model.db.DataStorage
 import ru.hse.miem.ros.data.model.entities.ConfigEntity
@@ -38,14 +39,12 @@ import java.util.Locale
  */
 class ConfigRepositoryImpl private constructor(application: Application) : ConfigRepository,
     CoroutineScope by CoroutineScope(Dispatchers.Default){
-    private val mDataStorage: DataStorage
-    private val mCurrentConfigId: MediatorLiveData<Long>
+    private val mDataStorage: DataStorage = DataStorage.getInstance(application)
+    private val mCurrentConfigId: MediatorLiveData<Long> = MediatorLiveData()
 
     init {
-        mDataStorage = DataStorage.getInstance(application)
-        mCurrentConfigId = MediatorLiveData()
         mCurrentConfigId.addSource(
-            mDataStorage.latestConfig
+            mDataStorage.getLatestConfig()
         ) { config: ConfigEntity? ->
             Log.i(TAG, "New Config: $config")
             if (config != null) mCurrentConfigId.postValue(config.id)
@@ -59,22 +58,25 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
         }
     }
 
-    public override suspend fun createConfig(configName: String?) {
-        val config = ConfigEntity()
-        config.creationTime = System.currentTimeMillis()
-        config.lastUsed = config.creationTime
-        config.name = configName
-        mDataStorage.addConfig(config)
-        val configId: Long = mDataStorage.latestConfigDirect.id
-        // Create new master connection
-        val master = MasterEntity()
-        master.configId = configId
-        mDataStorage.addMaster(master)
-        // Create new ssh connection
-        val sshEntity = SSHEntity()
-        sshEntity.configId = configId
-        mDataStorage.addSSH(sshEntity)
+    override suspend fun createConfig(configName: String?) {
+        coroutineScope {
+            launch {
+                val config = ConfigEntity()
+                config.creationTime = System.currentTimeMillis()
+                config.lastUsed = config.creationTime
+                config.name = configName
+                mDataStorage.addConfig(config)
+                val configId: Long = mDataStorage.getLatestConfigDirect().id
+                val master = MasterEntity()
+                master.configId = configId
+                mDataStorage.addMaster(master)
+                val sshEntity = SSHEntity()
+                sshEntity.configId = configId
+                mDataStorage.addSSH(sshEntity)
+            }
+        }
     }
+
 
     public override suspend fun removeConfig(configId: Long) {
         mDataStorage.deleteConfig(configId)
@@ -100,35 +102,39 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
         }
 
     // WIDGETS -------------------------------------------------------------------------------------
-    public override suspend fun addWidget(parentId: Long, widget: BaseEntity) {
+    public override suspend fun addWidget(parentId: Long?, widget: BaseEntity) {
         Log.i(TAG, "Add widget: " + widget.name)
-        searchParent(widget, parentId, object : ParentListener {
-            override suspend fun onParent(parentEntity: BaseEntity?) {
-                parentEntity?.let {
-                    it.addEntity(widget)
-                    mDataStorage.updateWidget(it)
+        if(parentId != null){
+            searchParent(widget, parentId, object : ParentListener {
+                override suspend fun onParent(parentEntity: BaseEntity?) {
+                    parentEntity?.let {
+                        it.addEntity(widget)
+                        mDataStorage.updateWidget(it)
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            mDataStorage.addWidget(widget)
+        }
     }
 
-    public override suspend fun createWidget(parentId: Long, widgetType: String) {
+    public override suspend fun createWidget(parentId: Long?, widgetType: String) {
         val widget: BaseEntity? = getWidgetFromType(widgetType)
         when (widget) {
             null -> return
             is I2DLayerEntity -> {
                 // Check for parent
-                searchParent(widget, parentId, object : ParentListener {
-                    override suspend fun onParent(parentEntity: BaseEntity?) {
-                        parentEntity?.addEntity(widget)
-                        if (parentEntity != null) {
-                            mDataStorage.updateWidget(parentEntity)
+                parentId?.let{
+                    searchParent(widget, it, object : ParentListener {
+                        override suspend fun onParent(parentEntity: BaseEntity?) {
+                            parentEntity?.addEntity(widget)
+                            if (parentEntity != null) {
+                                mDataStorage.updateWidget(parentEntity)
+                            }
                         }
-                    }
-                })
-            }
-
-            else -> {
+                    })
+                }
+            } else -> {
                 mDataStorage.addWidget(widget)
             }
         }
@@ -136,8 +142,8 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
     }
 
     public override suspend fun updateWidget(parentId: Long?, widget: BaseEntity) {
-        parentId?.let{
-            searchParent(widget, it, object : ParentListener {
+        if (parentId != null){
+            searchParent(widget, parentId, object : ParentListener {
                 override suspend fun onParent(parentEntity: BaseEntity?) {
                     parentEntity?.replaceChild(widget)
                     if (parentEntity != null) {
@@ -145,25 +151,32 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
                     }
                 }
             })
+        } else {
+            mDataStorage.updateWidget(widget)
         }
     }
 
-    public override suspend fun deleteWidget(parentId: Long, widget: BaseEntity) {
-        searchParent(widget, parentId, object : ParentListener {
-            override suspend fun onParent(parentEntity: BaseEntity?) {
-                parentEntity?.removeChild(widget)
-                if (parentEntity != null) {
-                    mDataStorage.updateWidget(parentEntity)
+    public override suspend fun deleteWidget(parentId: Long?, widget: BaseEntity) {
+        if (parentId != null){
+            searchParent(widget, parentId, object : ParentListener {
+                override suspend fun onParent(parentEntity: BaseEntity?) {
+                    parentEntity?.removeChild(widget)
+                    if (parentEntity != null) {
+                        mDataStorage.updateWidget(parentEntity)
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            mDataStorage.deleteWidget(widget)
+        }
+
     }
 
     public override fun getWidgets(id: Long): LiveData<List<BaseEntity>> {
         return mDataStorage.getWidgets(id)
     }
 
-    public override fun findWidget(widgetId: Long): LiveData<BaseEntity?> {
+    public override fun findWidget(widgetId: Long): LiveData<BaseEntity> {
         return mDataStorage.getWidget((mCurrentConfigId.getValue())!!, widgetId)
     }
 
@@ -201,9 +214,9 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
     }
 
     private fun searchParent(widget: BaseEntity, parentId: Long, listener: ParentListener) {
-        val liveParent: LiveData<BaseEntity?> = mDataStorage.getWidget(widget.configId, parentId)
-        liveParent.observeForever(object : Observer<BaseEntity?> {
-            public override fun onChanged(value: BaseEntity?) {
+        val liveParent: LiveData<BaseEntity> = mDataStorage.getWidget(widget.configId, parentId)
+        liveParent.observeForever(object : Observer<BaseEntity> {
+            public override fun onChanged(value: BaseEntity) {
                 val observer = this
                 launch {
                     listener.onParent(value)
@@ -218,7 +231,7 @@ class ConfigRepositoryImpl private constructor(application: Application) : Confi
         mDataStorage.updateMaster(master)
     }
 
-    public override fun getMaster(configId: Long): LiveData<MasterEntity> {
+    public override fun getMaster(configId: Long): LiveData<MasterEntity?> {
         return mDataStorage.getMaster(configId)
     }
 

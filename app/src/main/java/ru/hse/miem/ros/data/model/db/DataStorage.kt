@@ -13,23 +13,6 @@ import ru.hse.miem.ros.data.model.entities.WidgetStorageData
 import ru.hse.miem.ros.data.model.entities.widgets.BaseEntity
 import ru.hse.miem.ros.utility.Constants
 
-/**
- * TODO: Description
- *
- * @author Maxim Kolpakov
- * @version 1.0.4
- * @created on 31.01.20
- * @updated on 15.05.20
- * @modified by Maxim Kolpakov
- * @updated on 04.06.20
- * @modified by Tanya Rykova
- * @updated on 27.07.20
- * @modified by Maxim Kolpakov
- * @updated on 27.07.20
- * @modified by Tanya Rykova
- * @updated on 23.09.20
- * @modified by Maxim Kolpakov
- */
 @Database(
     entities = [ConfigEntity::class, MasterEntity::class, WidgetStorageData::class, SSHEntity::class],
     version = 6,
@@ -66,12 +49,14 @@ abstract class DataStorage : RoomDatabase() {
         return configDao().getConfig(id)
     }
 
-    val latestConfig: LiveData<ConfigEntity>
-        get() = configDao().latestConfig
-    val latestConfigDirect: ConfigEntity
-        get() = configDao().latestConfigDirect
+    fun getLatestConfig(): LiveData<ConfigEntity> {
+        return configDao().getLatestConfig()
+    }
+    suspend fun getLatestConfigDirect(): ConfigEntity {
+        return configDao().getLatestConfigDirect()
+    }
     val allConfigs: LiveData<List<ConfigEntity>>
-        get() = configDao().allConfigs
+        get() = configDao().getAllConfigs()
 
     // Master methods ------------------------------------------------------------------------------
     suspend fun addMaster(master: MasterEntity) {
@@ -86,7 +71,7 @@ abstract class DataStorage : RoomDatabase() {
         masterDao().delete(configId)
     }
 
-    fun getMaster(id: Long): LiveData<MasterEntity> {
+    fun getMaster(id: Long): LiveData<MasterEntity?> {
         return masterDao().getMaster(id)
     }
 
@@ -120,7 +105,7 @@ abstract class DataStorage : RoomDatabase() {
         widgetDao().delete(widget)
     }
 
-    fun getWidget(configId: Long, widgetId: Long): LiveData<BaseEntity?> {
+    fun getWidget(configId: Long, widgetId: Long): LiveData<BaseEntity> {
         return widgetDao().getWidget(configId, widgetId)
     }
 

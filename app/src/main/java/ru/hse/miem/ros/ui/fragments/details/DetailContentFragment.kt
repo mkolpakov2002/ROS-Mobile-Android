@@ -17,8 +17,6 @@ import ru.hse.miem.ros.ui.views.details.DetailViewHolder
 import ru.hse.miem.ros.utility.Constants
 import ru.hse.miem.ros.utility.Utils
 import ru.hse.miem.ros.viewmodel.DetailsViewModel
-import java.lang.reflect.Constructor
-import java.util.Locale
 
 /**
  * TODO: Description
@@ -74,45 +72,44 @@ class DetailContentFragment() : Fragment(), WidgetChangeListener {
 
     private fun initView(baseEntity: BaseEntity) {
         var entity: BaseEntity? = null
-        val widgetPath: List<Long>? = viewModel.widgetPath.getValue()
-        if (widgetPath!!.size == 1) {
-            backButtonGroup.visibility = View.INVISIBLE
-            entity = baseEntity
-        } else if (widgetPath.size == 2) {
-            backButtonGroup.text = baseEntity.name
-            backButtonGroup.visibility = View.VISIBLE
-            entity = baseEntity.getChildById((widgetPath[1]))
+        val widgetPath = viewModel.widgetPath.value
+
+        when (widgetPath?.size) {
+            1 -> {
+                backButtonGroup.visibility = View.INVISIBLE
+                entity = baseEntity
+            }
+            2 -> {
+                backButtonGroup.text = baseEntity.name
+                backButtonGroup.visibility = View.VISIBLE
+                entity = baseEntity.getChildById(widgetPath[1])
+            }
         }
+
         try {
-            // create and init widget view
-            val layoutStr: String = String.format(
-                Constants.DETAIL_LAYOUT_FORMAT, entity!!.type!!.lowercase(
-                    Locale.getDefault()
-                )
-            )
-            val detailContentLayout: Int = Utils.getResId(layoutStr, R.layout::class.java)
-            val inflator: LayoutInflater = LayoutInflater.from(widgetContainer.context)
-            val itemView: View = inflator.inflate(detailContentLayout, widgetContainer, false)
+            entity?.let{
+                // create and init widget view
+                val layoutStr = String.format(Constants.DETAIL_LAYOUT_FORMAT, it.type?.lowercase())
+                val detailContentLayout = Utils.getResId(layoutStr, R.layout::class.java)
+                val inflator = LayoutInflater.from(widgetContainer.context)
+                val itemView = inflator.inflate(detailContentLayout, widgetContainer, false)
 
-            // Create and init view holder
-            val viewholderClassPath: String = (BuildConfig.APPLICATION_ID
-                    + String.format(
-                Constants.VIEWHOLDER_FORMAT,
-                entity.type!!.lowercase(Locale.getDefault()),
-                entity.type
-            ))
-            val clazzObject: Class<DetailViewHolder> =
-                Class.forName(viewholderClassPath) as Class<DetailViewHolder>
-            val cons: Constructor<DetailViewHolder> = clazzObject.getConstructor()
-            widgetHolder = cons.newInstance()
-            widgetHolder.widgetChangeListener = this
-            widgetHolder.viewModel = viewModel
-            widgetHolder.itemView = itemView
-            widgetHolder.widget = entity
+                // Create and init view holder
+                val viewholderClassPath = BuildConfig.APPLICATION_ID +
+                        String.format(Constants.VIEWHOLDER_FORMAT, it.type?.lowercase(), it.type)
+                val clazzObject = Class.forName(viewholderClassPath).asSubclass(DetailViewHolder::class.java)
+                val cons = clazzObject.getConstructor()
 
-            // Add view
-            widgetContainer.removeAllViews()
-            widgetContainer.addView(itemView)
+                widgetHolder = cons.newInstance()
+                widgetHolder.widgetChangeListener = (this)
+                widgetHolder.viewModel = (viewModel)
+                widgetHolder.itemView = (itemView)
+                widgetHolder.widget = (it)
+
+                // Add view
+                widgetContainer.removeAllViews()
+                widgetContainer.addView(itemView)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

@@ -30,12 +30,12 @@ interface ConfigRepository {
     fun getConfig(id: Long): LiveData<ConfigEntity>
     val currentConfig: LiveData<ConfigEntity>
     suspend fun updateMaster(master: MasterEntity)
-    fun getMaster(configId: Long): LiveData<MasterEntity>
-    suspend fun addWidget(parentId: Long, widget: BaseEntity)
-    suspend fun createWidget(parentId: Long, widgetType: String)
-    suspend fun deleteWidget(parentId: Long, widget: BaseEntity)
+    fun getMaster(configId: Long): LiveData<MasterEntity?>
+    suspend fun addWidget(parentId: Long?, widget: BaseEntity)
+    suspend fun createWidget(parentId: Long?, widgetType: String)
+    suspend fun deleteWidget(parentId: Long?, widget: BaseEntity)
     suspend fun updateWidget(parentId: Long?, widget: BaseEntity)
-    fun findWidget(widgetId: Long): LiveData<BaseEntity?>
+    fun findWidget(widgetId: Long): LiveData<BaseEntity>
     fun getWidgets(id: Long): LiveData<List<BaseEntity>>
     suspend fun updateSSH(ssh: SSHEntity)
     fun setSSH(ssh: SSHEntity, configId: String)

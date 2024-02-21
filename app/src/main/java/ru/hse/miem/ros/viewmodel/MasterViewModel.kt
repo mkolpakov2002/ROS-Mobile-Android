@@ -7,11 +7,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import ru.hse.miem.ros.data.model.entities.MasterEntity
 import ru.hse.miem.ros.data.model.repositories.rosRepo.connection.ConnectionType
 import ru.hse.miem.ros.domain.RosDomain
 import ru.hse.miem.ros.utility.Utils
-import kotlinx.coroutines.launch
 
 /**
  * TODO: Description
@@ -27,15 +27,10 @@ import kotlinx.coroutines.launch
  * @modified by Maxim Kolpakov
  */
 class MasterViewModel(application: Application) : AndroidViewModel(application) {
-    private val rosDomain: RosDomain
-    private val currentMaster: LiveData<MasterEntity>
+    private val rosDomain: RosDomain = RosDomain.getInstance(application)
+    private val currentMaster: LiveData<MasterEntity?> = rosDomain.currentMaster
     private lateinit var networkSSIDLiveData: MutableLiveData<String?>
     private var lastTimeHelpShowed: Long = 0
-
-    init {
-        rosDomain = RosDomain.getInstance(application)
-        currentMaster = rosDomain.currentMaster
-    }
 
     fun updateHelpDisplay() {
         lastTimeHelpShowed = System.currentTimeMillis()
@@ -75,10 +70,11 @@ class MasterViewModel(application: Application) : AndroidViewModel(application) 
         rosDomain.disconnectFromMaster()
     }
 
-    val master: LiveData<MasterEntity>
+    val master: LiveData<MasterEntity?>
         get() {
             return rosDomain.currentMaster
         }
+
     val rosConnection: LiveData<ConnectionType>
         get() {
             return rosDomain.rosConnection
@@ -96,10 +92,12 @@ class MasterViewModel(application: Application) : AndroidViewModel(application) 
             setWifiSSID()
             return networkSSIDLiveData
         }
+
     val iPAddressList: ArrayList<String?>
         get() {
             return Utils.getIPAddressList(true)
         }
+
     val iPAddress: String
         get() {
             return Utils.getIPAddress(true)
@@ -117,6 +115,6 @@ class MasterViewModel(application: Application) : AndroidViewModel(application) 
 
     companion object {
         private val TAG: String = MasterViewModel::class.java.simpleName
-        private val MIN_HELP_TIMESPAM: Long = (30 * 1000).toLong()
+        private const val MIN_HELP_TIMESPAM: Long = (30 * 1000).toLong()
     }
 }

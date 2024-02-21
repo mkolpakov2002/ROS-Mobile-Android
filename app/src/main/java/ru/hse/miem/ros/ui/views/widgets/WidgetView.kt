@@ -25,7 +25,7 @@ import kotlin.math.max
  * @created on 10.03.21
  */
 abstract class WidgetView : ViewGroup, IBaseView {
-    var position: Position? = null
+    lateinit var position: Position
         protected set
     override var widgetEntity: BaseEntity? = null
         set(value) {

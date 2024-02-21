@@ -33,40 +33,39 @@ import ru.hse.miem.ros.data.model.repositories.rosRepo.node.BaseData
  */
 class RosDomain private constructor(application: Application) {
     // Repositories
-    private val configRepository: ConfigRepository
-    private val rosRepo: RosRepository
+    private val configRepository: ConfigRepository = ConfigRepositoryImpl.getInstance(application)
+    private val rosRepo: RosRepository = RosRepository.getInstance(application)
 
     // Data objects
-    val currentWidgets: LiveData<List<BaseEntity>>
-    val currentMaster: LiveData<MasterEntity>
+
+    // React on config change and get the new data
+    val currentWidgets: LiveData<List<BaseEntity>> = configRepository.currentConfigId
+        .switchMap { id: Long -> configRepository.getWidgets(id) }
+    val currentMaster: LiveData<MasterEntity?> =
+        configRepository.currentConfigId.switchMap { configId: Long ->
+                configRepository.getMaster(configId)
+            }
 
     init {
-        rosRepo = RosRepository.getInstance(application)
-        configRepository = ConfigRepositoryImpl.getInstance(application)
-
-        // React on config change and get the new data
-        currentWidgets = configRepository.currentConfigId
-            .switchMap { id: Long -> configRepository.getWidgets(id) }
-        currentMaster = configRepository.currentConfigId
-            .switchMap { configId: Long -> configRepository.getMaster(configId) }
-
         currentWidgets.observeForever { newWidgets: List<BaseEntity> ->
             rosRepo.updateWidgets(
                 newWidgets
             )
         }
-        currentMaster.observeForever { master: MasterEntity? -> rosRepo.updateMaster(master) }
+        currentMaster.observeForever { master: MasterEntity? ->
+            rosRepo.updateMaster(master)
+        }
     }
 
     fun publishData(data: BaseData) {
         rosRepo.publishData(data)
     }
 
-    suspend fun createWidget(parentId: Long, widgetType: String) {
+    suspend fun createWidget(parentId: Long?, widgetType: String) {
         configRepository.createWidget(parentId, widgetType)
     }
 
-    suspend fun addWidget(parentId: Long, widget: BaseEntity) {
+    suspend fun addWidget(parentId: Long?, widget: BaseEntity) {
         configRepository.addWidget(parentId, widget)
     }
 
@@ -74,11 +73,11 @@ class RosDomain private constructor(application: Application) {
         configRepository.updateWidget(parentId, widget)
     }
 
-    suspend fun deleteWidget(parentId: Long, widget: BaseEntity) {
+    suspend fun deleteWidget(parentId: Long?, widget: BaseEntity) {
         configRepository.deleteWidget(parentId, widget)
     }
 
-    fun findWidget(widgetId: Long): LiveData<BaseEntity?> {
+    fun findWidget(widgetId: Long): LiveData<BaseEntity> {
         return configRepository.findWidget(widgetId)
     }
 

@@ -57,9 +57,7 @@ class ConfigurationsFragment() : Fragment() {
     @Deprecated("Deprecated in Java")
     public override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mViewModel = ViewModelProvider(this).get(
-            ConfigurationsViewModel::class.java
-        )
+        mViewModel = ViewModelProvider(this)[ConfigurationsViewModel::class.java]
         setUpRecyclerViews()
         addConfigButton.setOnClickListener { v: View? -> mViewModel.addConfig() }
         renameButton.setOnClickListener { v: View? -> showRenameDialog() }

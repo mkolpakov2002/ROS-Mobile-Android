@@ -9,7 +9,6 @@ import android.widget.ImageButton
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import ru.hse.miem.ros.R
@@ -31,7 +30,7 @@ import ru.hse.miem.ros.viewmodel.VizViewModel
  */
 class VizFragment() : Fragment(), DataListener, WidgetChangeListener {
     private lateinit var mViewModel: VizViewModel
-    private lateinit var widgetViewGroupview: WidgetViewGroup
+    private lateinit var widgetViewGroupView: WidgetViewGroup
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var optionsOpenButton: ImageButton
     private lateinit var vizEditModeSwitch: SwitchMaterial
@@ -44,9 +43,9 @@ class VizFragment() : Fragment(), DataListener, WidgetChangeListener {
 
     public override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        widgetViewGroupview = view.findViewById(R.id.widget_groupview)
-        widgetViewGroupview.setDataListener(this)
-        widgetViewGroupview.setOnWidgetDetailsChanged(this)
+        widgetViewGroupView = view.findViewById(R.id.widget_groupview)
+        widgetViewGroupView.setDataListener(this)
+        widgetViewGroupView.setOnWidgetDetailsChanged(this)
         optionsOpenButton = view.findViewById(R.id.viz_options_open_button)
         drawerLayout = view.findViewById(R.id.viz_options_drawer)
         drawerLayout.setScrimColor(resources.getColor(R.color.drawerFadeColor))
@@ -60,17 +59,16 @@ class VizFragment() : Fragment(), DataListener, WidgetChangeListener {
         mViewModel.currentWidgets.observe(
             getViewLifecycleOwner()
         ) { widgetEntities: List<BaseEntity> ->
-            widgetViewGroupview.setWidgets(
+            widgetViewGroupView.setWidgets(
                 widgetEntities,
                 mViewModel.lastRosData
             )
         }
         mViewModel.data.observe(
-            getViewLifecycleOwner(),
-            Observer { data: RosData -> widgetViewGroupview.onNewData(data) }
-        )
+            getViewLifecycleOwner()
+        ) { data: RosData -> widgetViewGroupView.onNewData(data) }
         vizEditModeSwitch.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
-            widgetViewGroupview.setVizEditMode(
+            widgetViewGroupView.setVizEditMode(
                 isChecked
             )
         }
@@ -86,11 +84,11 @@ class VizFragment() : Fragment(), DataListener, WidgetChangeListener {
         }
     }
 
-    public override fun onNewWidgetData(data: BaseData) {
+    override fun onNewWidgetData(data: BaseData) {
         mViewModel.publishData(data)
     }
 
-    public override fun onWidgetDetailsChanged(widgetEntity: BaseEntity) {
+    override fun onWidgetDetailsChanged(widgetEntity: BaseEntity) {
         mViewModel.updateWidget(widgetEntity)
     }
 

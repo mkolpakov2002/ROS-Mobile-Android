@@ -54,12 +54,12 @@ import java.net.URI
  * @modified by Maxim Kolpakov
  */
 class RosRepository private constructor(context: Context) : SubNode.NodeListener {
-    private val contextReference: WeakReference<Context>
-    private val currentWidgets: MutableList<BaseEntity>
-    val lastRosData: HashMap<Topic?, AbstractNode>
-    private val rosConnected: MutableLiveData<ConnectionType>
-    private val receivedData: MutableLiveData<RosData>
-    private val frameTransformTree: FrameTransformTree
+    private val contextReference: WeakReference<Context> = WeakReference(context)
+    private val currentWidgets: MutableList<BaseEntity> = ArrayList()
+    val lastRosData: HashMap<Topic?, AbstractNode> = HashMap()
+    private val rosConnected: MutableLiveData<ConnectionType> = MutableLiveData(ConnectionType.DISCONNECTED)
+    private val receivedData: MutableLiveData<RosData> = MutableLiveData()
+    private val frameTransformTree: FrameTransformTree = TransformProvider.getInstance().tree
     private lateinit var master: MasterEntity
     private lateinit var nodeMainExecutorService: NodeMainExecutorService
     private lateinit var nodeConfiguration: NodeConfiguration
@@ -68,12 +68,6 @@ class RosRepository private constructor(context: Context) : SubNode.NodeListener
      * Default private constructor. Initialize empty lists and maps of intern widgets and nodes.
      */
     init {
-        contextReference = WeakReference(context)
-        currentWidgets = ArrayList()
-        lastRosData = HashMap()
-        rosConnected = MutableLiveData(ConnectionType.DISCONNECTED)
-        receivedData = MutableLiveData()
-        frameTransformTree = TransformProvider.getInstance().tree
         initStaticNodes()
     }
 
@@ -169,7 +163,7 @@ class RosRepository private constructor(context: Context) : SubNode.NodeListener
     }
 
     /**
-     * Set the master device IP in the Nodeconfiguration
+     * Set the master device IP in the Node configuration
      */
     fun setMasterDeviceIp(deviceIp: String?) {
         nodeConfiguration = NodeConfiguration.newPublic(deviceIp, masterURI)

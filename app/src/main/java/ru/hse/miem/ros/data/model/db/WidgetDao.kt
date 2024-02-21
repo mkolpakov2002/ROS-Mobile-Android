@@ -8,17 +8,6 @@ import ru.hse.miem.ros.data.model.entities.WidgetStorageData
 import ru.hse.miem.ros.data.model.entities.widgets.BaseEntity
 import ru.hse.miem.ros.data.model.general.GsonWidgetParser
 
-/**
- * TODO: Description
- *
- * @author Maxim Kolpakov
- * @version 1.0.1
- * @created on 31.01.20
- * @updated on 09.05.20
- * @modified by Maxim Kolpakov
- * @updated on 23.09.20
- * @modified by Maxim Kolpakov
- */
 @Dao
 abstract class WidgetDao : BaseDao<WidgetStorageData> {
     //TODO: Update test to real classes
@@ -34,7 +23,7 @@ abstract class WidgetDao : BaseDao<WidgetStorageData> {
     abstract suspend fun exists(configId: Long, name: String): Boolean
     @Query("SELECT * FROM widget_table WHERE widget_config_id = :configId AND id = :widgetId")
     abstract fun getWidgetIntern(configId: Long, widgetId: Long): LiveData<WidgetStorageData>
-    fun getWidget(configId: Long, widgetId: Long): LiveData<BaseEntity?> {
+    fun getWidget(configId: Long, widgetId: Long): LiveData<BaseEntity> {
         val widget = MediatorLiveData<BaseEntity>()
         widget.addSource(getWidgetIntern(configId, widgetId)) { data: WidgetStorageData ->
             widget.postValue(GsonWidgetParser.instance.convert(data))

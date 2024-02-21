@@ -5,22 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<!--    android:background="?attr/colorPrimaryContainer"-->
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/viz_options_drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:openDrawer="right"
-        android:background="?attr/colorPrimaryContainer">
+        tools:openDrawer="right">
 
+<!--        app:crossColor="?attr/colorAccent"-->
         <ru.hse.miem.ros.ui.fragments.viz.WidgetViewGroup
             android:id="@+id/widget_groupview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
-            app:crossColor="?attr/colorAccent">
+            >
 
         </ru.hse.miem.ros.ui.fragments.viz.WidgetViewGroup>
 
@@ -35,9 +37,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="?attr/colorSurface"
                 android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:background="?attr/colorSurface">
+                android:paddingVertical="8dp">
 
                 <TextView
                     android:id="@+id/viz_options_textView"
@@ -49,6 +51,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+<!--                                    app:thumbTint="?attr/colorAccent"-->
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/edit_viz_switch"
                     android:layout_width="match_parent"
@@ -56,8 +59,7 @@
                     android:layout_marginTop="8dp"
                     android:text="Edit Mode"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/viz_options_textView"
-                    app:thumbTint="?attr/colorAccent" />
+                    app:layout_constraintTop_toBottomOf="@+id/viz_options_textView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

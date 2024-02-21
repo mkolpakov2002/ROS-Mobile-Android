@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import ru.hse.miem.ros.R
 import ru.hse.miem.ros.databinding.FragmentIntroBinding
-import ru.hse.miem.ros.ui.fragments.main.MainFragment
+import ru.hse.miem.ros.ui.fragments.device.DeviceFragment
 import ru.hse.miem.ros.viewmodel.IntroViewModel
 
 
@@ -30,13 +30,13 @@ import ru.hse.miem.ros.viewmodel.IntroViewModel
  * @modified by Tanya Rykova
  */
 class IntroFragment() : Fragment() {
-    lateinit var screenPager: ViewPager
-    lateinit var introViewPagerAdapter: IntroViewPagerAdapter
-    lateinit var buttonAnimation: Animation
-    lateinit var mViewModel: IntroViewModel
+    private lateinit var screenPager: ViewPager
+    private lateinit var introViewPagerAdapter: IntroViewPagerAdapter
+    private lateinit var buttonAnimation: Animation
+    private lateinit var mViewModel: IntroViewModel
     lateinit var screenItems: List<ScreenItem?>
-    var itemPosition: Int = 0
-    var requireCheckIn: Boolean = false
+    private var itemPosition: Int = 0
+    private var requireCheckIn: Boolean = false
     private lateinit var binding: FragmentIntroBinding
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,8 +50,8 @@ class IntroFragment() : Fragment() {
             AnimationUtils.loadAnimation(view.context, R.anim.onboarding_buttton_animation)
 
         // Setup the viewPager
-        screenPager = view.findViewById(R.id.screen_viewpager)
-        introViewPagerAdapter = IntroViewPagerAdapter(context, if (requireCheckIn) mViewModel.onboardingScreenItems else mViewModel.updateScreenItems)
+        screenPager = binding.screenViewpager
+        introViewPagerAdapter = IntroViewPagerAdapter(requireContext(), if (requireCheckIn) mViewModel.onboardingScreenItems else mViewModel.updateScreenItems)
         screenItems = introViewPagerAdapter.getListScreenItem()
         screenPager.setAdapter(introViewPagerAdapter)
 
@@ -123,17 +123,12 @@ class IntroFragment() : Fragment() {
         if (activity == null) {
             return
         }
-        val mainFragment: MainFragment = MainFragment()
-        if (bundle != null) mainFragment.setArguments(bundle)
+        val deviceFragment: DeviceFragment = DeviceFragment()
+        if (bundle != null) deviceFragment.setArguments(bundle)
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, mainFragment)
+            .replace(R.id.main_container, deviceFragment)
             .addToBackStack(null)
             .commit()
-    }
-
-    @Deprecated("Deprecated in Java")
-    public override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     // show the get started button and hide the indicator and the next button

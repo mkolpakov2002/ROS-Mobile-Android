@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import ru.hse.miem.ros.R
@@ -68,7 +67,7 @@ class MasterFragment() : Fragment(), OnEditorActionListener {
         binding.ipAddessTextView.setAdapter(ipArrayAdapter)
         val firstDeviceIp: String = mViewModel.iPAddress
         binding.ipAddessTextView.setText(firstDeviceIp, false)
-        binding.ipAddessTextView.setOnClickListener { clickedView: View? ->
+        binding.ipAddessTextView.setOnClickListener {
             updateIpSpinner()
             binding.ipAddessTextView.showDropDown()
         }
@@ -77,7 +76,7 @@ class MasterFragment() : Fragment(), OnEditorActionListener {
             binding.ipAddessTextView.callOnClick()
         }
         binding.ipAddessTextView.setOnItemClickListener {
-            parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+                _: AdapterView<*>?, _: View?, _: Int, _: Long ->
             binding.ipAddessTextView.clearFocus()
         }
 
@@ -93,13 +92,11 @@ class MasterFragment() : Fragment(), OnEditorActionListener {
                 binding.masterPortEditText.setText(master.port.toString())
             }
         mViewModel.currentNetworkSSID.observe(
-            getViewLifecycleOwner(),
-            Observer { networkSSID: String? -> binding.NetworkSSIDText.setText(networkSSID) }
-        )
+            getViewLifecycleOwner()
+        ) { networkSSID: String? -> binding.NetworkSSIDText.setText(networkSSID) }
         mViewModel.rosConnection.observe(
-            getViewLifecycleOwner(),
-            Observer { connectionType: ConnectionType? -> setRosConnection(connectionType) }
-        )
+            getViewLifecycleOwner()
+        ) { connectionType: ConnectionType? -> setRosConnection(connectionType) }
 
         // User input ------------------------------------------------------------------------------
         binding.connectButton.setOnClickListener { v: View? ->

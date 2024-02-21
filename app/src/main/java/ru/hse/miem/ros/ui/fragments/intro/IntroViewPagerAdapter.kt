@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
-import ru.hse.miem.ros.R
+import ru.hse.miem.ros.databinding.FragentOnboardingBinding
 
 /**
  * TODO: Description
@@ -18,21 +18,24 @@ import ru.hse.miem.ros.R
  * @updated on
  * @modified by
  */
-class IntroViewPagerAdapter(var mContext: Context?, var mListScreenItem: List<ScreenItem>) :
+class IntroViewPagerAdapter(var mContext: Context, var mListScreenItem: List<ScreenItem>) :
     PagerAdapter() {
     public override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val inflater: LayoutInflater =
-            mContext!!.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val layoutScreen: View = inflater.inflate(R.layout.fragent_onboarding, null)
-        val imgSlide: ImageView = layoutScreen.findViewById(R.id.introImage)
-        val title: TextView = layoutScreen.findViewById(R.id.introTitle)
-        val description: TextView = layoutScreen.findViewById(R.id.introDescription)
+            mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        binding = FragentOnboardingBinding.inflate(inflater)
+//        val layoutScreen: View = inflater.inflate(R.layout.fragent_onboarding, null)
+        val imgSlide: ImageView = binding.introImage
+        val title: TextView = binding.introTitle
+        val description: TextView = binding.introDescription
         title.text = mListScreenItem[position].title
         description.text = mListScreenItem[position].description
         imgSlide.setImageResource(mListScreenItem[position].screenImage)
-        container.addView(layoutScreen)
-        return layoutScreen
+        container.addView(binding.root)
+        return binding.root
     }
+
+    private lateinit var binding: FragentOnboardingBinding
 
     public override fun getCount(): Int {
         return mListScreenItem.size

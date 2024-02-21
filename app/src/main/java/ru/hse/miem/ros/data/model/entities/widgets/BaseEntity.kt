@@ -2,15 +2,6 @@ package ru.hse.miem.ros.data.model.entities.widgets
 
 import ru.hse.miem.ros.data.model.repositories.rosRepo.message.Topic
 
-/**
- * TODO: Description
- *
- * @author Maxim Kolpakov
- * @version 1.1
- * @created on 23.09.20
- * @updated on 10.03.21
- * @modified by Maxim Kolpakov
- */
 abstract class BaseEntity {
     var id: Long = 0
     var name: String = ""

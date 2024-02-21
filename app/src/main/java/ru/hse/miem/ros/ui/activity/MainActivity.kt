@@ -2,64 +2,60 @@ package ru.hse.miem.ros.ui.activity
 
 import android.Manifest
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import ru.hse.miem.ros.R
 import ru.hse.miem.ros.databinding.ActivityMainBinding
-import ru.hse.miem.ros.ui.fragments.intro.IntroFragment
-import ru.hse.miem.ros.ui.fragments.main.MainFragment
-import ru.hse.miem.ros.ui.fragments.main.OnBackPressedListener
+import ru.hse.miem.ros.ui.fragments.device.OnBackPressedListener
 
-/**
- * TODO: Description
- *
- * @author Maxim Kolpakov
- * @version 1.0.1
- * @created on 16.01.20
- * @updated on 19.06.20
- * @modified by Tanya Rykova
- * @updated on 27.07.20
- * @modified by Tanya Rykova
- */
 class MainActivity() : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
         setContentView(binding.root)
-        try {
-            if (savedInstanceState == null && requiresIntro()) {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_container, IntroFragment.newInstance())
-                    .commitNow()
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_container) as NavHostFragment
+        navController = navHostFragment.navController
+        if (savedInstanceState == null) {
+            if (requiresIntro()) {
+                navController.navigate(R.id.introFragment)
             } else {
-                val myToolbar: Toolbar? = findViewById(R.id.toolbar)
-                setSupportActionBar(myToolbar)
-                if (savedInstanceState == null) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_container, MainFragment.newInstance())
-                        .commitNow()
-                }
+                navController.navigate(R.id.homeFragment)
             }
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
         }
         this.requestPermissions()
+        onBackPressedDispatcher.addCallback(this /* lifecycle owner */, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.main_container)
+                if (fragment is OnBackPressedListener) {
+                    if (fragment.onBackPressed()) {
+                        return
+                    }
+                }
+            }
+        })
     }
 
-    @Deprecated("Deprecated in Java")
-    public override fun onBackPressed() {
-        val fragment: Fragment? = supportFragmentManager.findFragmentById(R.id.main_container)
-        if (fragment is OnBackPressedListener) {
-            if (fragment.onBackPressed()) {
-                return
-            }
-        }
-        super.onBackPressed()
+    private val listener = NavController.OnDestinationChangedListener { controller, destination, arguments ->
+        Log.d("Current destination", destination.label.toString())
+    }
+    override fun onResume() {
+        super.onResume()
+        navController.addOnDestinationChangedListener(listener)
+    }
+    override fun onPause() {
+        navController.removeOnDestinationChangedListener(listener)
+        super.onPause()
     }
 
     private fun requestPermissions() {
@@ -71,19 +67,16 @@ class MainActivity() : AppCompatActivity() {
     }
 
     // Check in required if update is available or onboarding has not been done yet
-    @Throws(PackageManager.NameNotFoundException::class)
     private fun requiresIntro(): Boolean {
         val pref: SharedPreferences =
             applicationContext.getSharedPreferences("introPrefs", MODE_PRIVATE)
-        return (pref.getInt(
-            "VersionNumber",
-            0
-        ) != packageManager.getPackageInfo(packageName, 0).versionCode) ||
+        return (pref.getInt("VersionNumber", 0).toLong() !=
+                packageManager.getPackageInfo(packageName, 0).longVersionCode) ||
                 !pref.getBoolean("CheckedIn", false)
     }
 
     companion object {
-        private val LOCATION_PERM: Int = 101
+        private const val LOCATION_PERM: Int = 101
         var TAG: String = MainActivity::class.java.simpleName
     }
 }

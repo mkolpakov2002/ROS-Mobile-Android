@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "ru.hse.miem.ros"
-        minSdk 26
+        minSdk 28
         targetSdk 34
         versionCode 7
         versionName '1.0.0'
@@ -49,13 +49,17 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
-    implementation "androidx.navigation:navigation-fragment-ktx:2.7.5"
-    implementation "androidx.navigation:navigation-ui-ktx:2.7.5"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.6"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.6"
 
-    implementation 'com.google.android.material:material:1.10.0'
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'com.google.android.material:material:1.12.0-alpha03'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-beta02'
 
     implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
+
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
 
 
     // ROS
@@ -74,8 +78,8 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.6.1"
     implementation "androidx.room:room-ktx:2.6.1"
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+    implementation 'androidx.core:core-ktx:1.13.0-alpha04'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     ksp "androidx.room:room-compiler:2.6.1"
 
     // Parsing
@@ -83,13 +87,13 @@ dependencies {
     implementation project(path: ':jcraft')
 
     // Open Street Maps (e.g. for GPS)
-    implementation 'org.osmdroid:osmdroid-android:6.1.14'
+    implementation 'org.osmdroid:osmdroid-android:6.1.18'
 
     // Playing Youtube Videos
-    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
 
     // Color picker
-    implementation "com.github.skydoves:colorpickerview:2.2.4"
+    implementation 'com.github.skydoves:colorpickerview:2.3.0'
 
 //    implementation "com.google.dagger:hilt-android:2.48.1"
 //    ksp "com.google.dagger:dagger-compiler:2.48.1" // Dagger compiler

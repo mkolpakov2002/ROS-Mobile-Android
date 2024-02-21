@@ -147,10 +147,10 @@ class WidgetViewGroup(context: Context?, attrs: AttributeSet?) : ViewGroup(conte
 
         // Check if view is visible
         if (child.visibility == GONE) return
-        val position: Position? = (child as WidgetView).position
+        val position: Position = (child as WidgetView).position
 
         // Y pos from bottom up
-        val w: Int = (position!!.width * tileWidth).toInt()
+        val w: Int = (position.width * tileWidth).toInt()
         val h: Int = (position.height * tileWidth).toInt()
         val x: Int = (paddingLeft + position.x * tileWidth).toInt()
         val y: Int =

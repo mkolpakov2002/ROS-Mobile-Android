@@ -35,13 +35,13 @@ import ru.hse.miem.ros.viewmodel.DetailsViewModel
  */
 class DetailMainFragment() : Fragment(), RecyclerWidgetItemTouchHelper.TouchListener,
     WidgetChangeListener {
-    private var navController: NavController? = null
+    private lateinit var navController: NavController
     private lateinit var viewModel: DetailsViewModel
     private lateinit var addWidgetCard: MaterialCardView
     private lateinit var noWidgetTextView: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var mAdapter: WidgetListAdapter
-    private var currentWidgetPath: List<String>? = null
+    private lateinit var currentWidgetPath: List<String>
     public override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,7 +93,7 @@ class DetailMainFragment() : Fragment(), RecyclerWidgetItemTouchHelper.TouchList
     private fun onWidgetClicked(entity: BaseEntity) {
         Log.i(TAG, "Clicked " + entity.name)
         viewModel.select(entity.id)
-        navController!!.navigate(R.id.action_detailOverview_to_depth1)
+        navController.navigate(R.id.action_detailOverview_to_depth1)
     }
 
     private fun showDialogWithWidgetNames() {
