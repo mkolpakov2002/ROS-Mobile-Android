@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="X-Axis"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_publisher" />
@@ -120,7 +120,7 @@
         android:layout_marginTop="16dp"
         android:text="Y-Axis"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/xScaleLeft" />
@@ -220,10 +220,11 @@
         android:layout_marginTop="76dp"
         android:text="Use Rectangular Stick Limits"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/xAxisScale2"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/xAxisScale2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

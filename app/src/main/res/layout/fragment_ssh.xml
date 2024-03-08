@@ -11,14 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            app:cardBackgroundColor="@color/black04dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,21 +38,24 @@
 
                 <TextView
                     android:id="@+id/ssh_connection_textView"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/ssh_connection"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="?attr/colorAccent"
+                    app:layout_constraintBottom_toBottomOf="@+id/sshConnectButton"
+                    app:layout_constraintEnd_toStartOf="@+id/sshConnectButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/sshConnectButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/button_connect"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    style="@style/ShapeAppearanceOverlay.Material3.Button"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/ip_address_inputLayout"
@@ -135,8 +137,6 @@
 
                     app:layout_constraintTop_toBottomOf="@+id/ip_address_inputLayout"
                     app:passwordToggleEnabled="true">
-                    app:layout_constraintTop_toBottomOf="@+id/ip_address_inputLayout">
-
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password_editText"
@@ -151,9 +151,9 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -162,7 +162,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/black04dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toTopOf="@+id/terminal_inputLayout"
@@ -189,7 +188,7 @@
                     android:layout_weight="1"
                     android:text="@string/ssh_terminal"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="?attr/colorAccent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -210,7 +209,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/terminal_inputLayout"
@@ -239,7 +238,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@+id/terminal_inputLayout"
             app:layout_constraintEnd_toStartOf="@id/sshAbortButton"
@@ -251,7 +249,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:backgroundTint="@color/colorAccent"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="@+id/terminal_inputLayout"
             app:layout_constraintEnd_toEndOf="parent"

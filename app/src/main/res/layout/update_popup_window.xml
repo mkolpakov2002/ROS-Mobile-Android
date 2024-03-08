@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="30dp"
-        android:text="New Features, Version 2.0"
+        android:text="New Features, Version 1.0.0"
         android:textSize="22sp" />
 
 </RelativeLayout>
